@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Sun B.B.Q</title>
+  
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Noto+Sans+TC:wght@400;700;900&display=swap');
+
+    :root {
+      --primary-red: #d32f2f;
+      --dark-red: #b71c1c;
+      --primary-yellow: #fdd835;
+      --bg-color: #fafafa;
+      --text-dark: #212121;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', 'Noto Sans TC', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-dark);
+      line-height: 1.6;
+    }
+
+    * { box-sizing: border-box; }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+    .text-center { text-align: center; }
+    .flex { display: flex; }
+    .justify-between { justify-content: space-between; }
+    .align-center { align-items: center; }
+
+    .hover-scale { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+    .hover-scale:hover { transform: translateY(-5px); box-shadow: 0 10px 15px rgba(0,0,0,0.1); }
+
+    .btn {
+      background-color: var(--primary-yellow); color: var(--dark-red);
+      border: none; padding: 0.5rem 1rem; font-weight: 700;
+      border-radius: 4px; cursor: pointer; transition: 0.2s;
+    }
+    .btn:hover { background-color: #ffb300; }
+    .auth-border { border: 2px solid var(--primary-yellow); border-radius: 8px; }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+
+  <script>
+    const menuData = {
+      pork: {
+        en: "Pork B.B.Q", zh: "豬肉類",
+        items: [
+          { id: "p1", zhName: "脆皮中豬", enName: "Roasted Golden Medium Pig", price: "時價 / Seasonal Price", unit: "" },
+          { id: "p2", zhName: "脆皮乳豬", enName: "Roasted Golden Baby Pig", price: "時價 / Seasonal Price", unit: "" },
+          { id: "p3", zhName: "脆皮燒肉", enName: "Roasted Pig", price: "$11.50", unit: "/磅 lb" },
+          { id: "p4", zhName: "瘦燒肉", enName: "Lean Roasted Pig", price: "$10.00", unit: "/磅 lb", special: true },
+          { id: "p5", zhName: "蜜汁叉燒", enName: "B.B.Q Pork", price: "$11.00", unit: "/磅 lb" },
+          { id: "p6", zhName: "紅腸", enName: "Red Sausage", price: "$11.00", unit: "/磅 lb" }
+        ]
+      },
+      poultry: {
+        en: "Poultry", zh: "家禽類",
+        items: [
+          { id: "b1", zhName: "燒鴨", enName: "Roasted Duck", price: "$35.40", unit: "/隻 each" },
+          { id: "b2", zhName: "滷水鴨", enName: "Duck in Soya Sauce", price: "$35.40", unit: "/隻 each" },
+          { id: "b3", zhName: "琵琶鴨", enName: "Special B.B.Q Duck", price: "$35.40", unit: "/隻 each" },
+          { id: "b4", zhName: "燒鵝", enName: "Roasted Goose", price: "$55.00", unit: "/隻 each" },
+          { id: "b5", zhName: "滷水鵝", enName: "Goose in Soya Sauce", price: "$55.00", unit: "/隻 each" },
+          { id: "b6", zhName: "白切走地雞", enName: "Cold Steamed Chicken", price: "$24.00", unit: "/隻 each" },
+          { id: "b7", zhName: "玫瑰走地雞", enName: "Soya Sauce Chicken", price: "$24.00", unit: "/隻 each" }
+        ]
+      },
+      others: {
+        en: "Specialties", zh: "其他風味",
+        items: [
+          { id: "o1", zhName: "滷水大腸", enName: "Pig's Intestine", price: "$14.90", unit: "/磅 lb" },
+          { id: "o2", zhName: "各式滷味", enName: "Soya Sauce Pig's Offals", price: "$10.00", unit: "/磅 lb" },
+          { id: "o3", zhName: "咕嚕肉", enName: "Sweet & Sour Pork", price: "$5.00", unit: "/盒 box" },
+          { id: "o4", zhName: "炆豬手", enName: "Pig Hock", price: "$6.00", unit: "/盒 box" },
+          { id: "o5", zhName: "滷水鴨翼", enName: "Soya Duck Wings", price: "$3.00", unit: "/盒 box" }
+        ]
+      },
+      combos: {
+        en: "Rice Combos", zh: "燒臘飯",
+        items: [
+          { id: "c1", zhName: "單拼飯", enName: "Rice w/ One Choice", price: "$5.31", unit: "/盒 box" },
+          { id: "c2", zhName: "雙拼飯", enName: "Rice w/ Two Choice", price: "$7.08", unit: "/盒 box" },
+          { id: "c3", zhName: "三拼飯", enName: "Rice w/ Three Choice", price: "$8.85", unit: "/盒 box" }
+        ]
+      }
+    };
+
+    let currentLang = 'zh';
+
+    function toggleLang() {
+      currentLang = currentLang === 'en' ? 'zh' : 'en';
+      render();
+    }
+
+    function t(en, zh) {
+      return currentLang === 'en' ? en : zh;
+    }
+
+    function render() {
+      const app = document.getElementById('app');
+      let menuHtml = '';
+
+      for (const catKey in menuData) {
+        const cat = menuData[catKey];
+        let itemsHtml = '';
+        
+        for (const item of cat.items) {
+          itemsHtml += `
+            <li class="flex justify-between" style="padding: 12px 0; border-bottom: 1px dashed #e0e0e0; align-items: flex-start;">
+              <div style="font-weight: 600; font-size: 1.1rem; display: flex; flex-direction: column; gap: 4px;">
+                <div>
+                  ${t(item.enName, item.zhName)}
+                  ${item.special ? `<span style="display: inline-block; background: #fbc02d; color: #b71c1c; font-size: 0.75rem; padding: 2px 6px; border-radius: 4px; margin-left: 8px; font-weight: bold;">${t('Special!', '酬賓特價')}</span>` : ''}
+                </div>
+              </div>
+              <div style="font-weight: 800; color: #d32f2f; font-size: 1.1rem; text-align: right;">
+                ${item.price}<span style="display: block; font-size: 0.8rem; color: #757575; font-weight: normal;">${item.unit}</span>
+              </div>
+            </li>
+          `;
+        }
+
+        menuHtml += `
+          <div class="auth-border hover-scale" style="background: white; padding: 20px; border-top: 6px solid #d32f2f; border-radius: 8px;">
+            <h4 style="color: #b71c1c; font-size: 1.5rem; margin: 0 0 20px 0; padding-bottom: 10px; border-bottom: 1px solid #eee;">${t(cat.en, cat.zh)}</h4>
+            <ul style="list-style: none; padding: 0; margin: 0;">
+              ${itemsHtml}
+            </ul>
+          </div>
+        `;
+      }
+
+      app.innerHTML = `
+        <nav style="background-color: #b71c1c; padding: 10px 0; color: white; position: sticky; top: 0; z-index: 100;">
+          <div class="container flex justify-between align-center">
+            <div class="flex align-center" style="gap: 15px;">
+              <img src="./images/Screenshot 2026-04-08 222434.png" alt="Logo" style="height: 50px; border: 2px solid #fbc02d; border-radius: 4px; background-color: white;" />
+              <h1 style="margin: 0; color: #fbc02d; font-size: 1.5rem;">${t('New Sun B.B.Q', '新日燒臘')}</h1>
+            </div>
+            <button class="btn" onclick="toggleLang()">${currentLang === 'en' ? '中文' : 'English'}</button>
+          </div>
+        </nav>
+
+        <header style="background-color: #d32f2f; background: linear-gradient(135deg, #d32f2f 0%, #b71c1c 100%); color: #fbc02d; padding: 60px 20px; text-align: center; border-bottom: 4px solid #fbc02d;">
+          <h2 style="font-size: 3rem; margin: 0 0 10px 0;">${t('Authentic Chinese B.B.Q', '正宗港式燒臘')}</h2>
+          <p style="color: white; margin: 0; font-size: 1.2rem;">${t('Freshly roasted daily for the best taste.', '每日明爐燒烤，保證新鮮美味。')}</p>
+        </header>
+
+        <main class="container" style="padding: 40px 20px;">
+          <div style="text-align: center;">
+            <h3 style="color: #b71c1c; font-size: 2.5rem; margin-bottom: 30px; display: inline-block; border-bottom: 3px solid #fbc02d; padding-bottom: 10px; margin-top: 0;">${t('Our Menu', '價目表')}</h3>
+          </div>
+          
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px;">
+            ${menuHtml}
+          </div>
+        </main>
+
+        <footer style="background-color: #212121; color: white; padding: 40px 20px; margin-top: 40px; border-top: 4px solid #fbc02d; text-align: center;">
+          <h3 style="color: #fbc02d; margin: 0 0 10px 0;">New Sun B.B.Q 新日燒臘</h3>
+          <p style="font-size: 1.1rem; line-height: 1.8; margin-bottom: 20px;">📞 416-293-7878 <br/> ${t('Open 6 days a week', '6 天營業')}</p>
+          <p style="color: #9e9e9e; font-size: 0.9rem; margin-top: 20px;">* Tax Not Included. Rice & Noodle Same Price.</p>
+        </footer>
+      `;
+    }
+
+    // Initialize application
+    render();
+  </script>
+</body>
+</html>
