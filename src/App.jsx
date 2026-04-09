@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { menuData } from './data/menu.js';
-import logoUrl from '../images/Screenshot 2026-04-08 222434.png';
 
 function App() {
   const [lang, setLang] = useState('zh'); // 'en' or 'zh'
@@ -17,8 +16,6 @@ function App() {
       <nav style={styles.navbar}>
         <div className="container flex justify-between align-center">
           <div style={styles.logoContainer} className="flex align-center">
-            {/* User requested to use the sign image as logo */}
-            <img src={logoUrl} alt="New Sun B.B.Q Logo" style={styles.logo} />
             <h1 style={styles.brandName}>{t('New Sun B.B.Q', '新日燒臘')}</h1>
           </div>
           <div className="flex align-center">
