@@ -66,10 +66,21 @@ function App() {
       <footer style={styles.footer}>
         <div className="container text-center">
           <h3 style={styles.footerBrand}>New Sun B.B.Q 新日燒臘</h3>
-          <p style={styles.footerText}>
-            📞 416-293-7878 <br/>
-            {t('Open 6 days a week', '6 天營業')}
-          </p>
+          <p style={styles.footerText}>📞 416-293-7878</p>
+          
+          <div style={styles.hoursContainer}>
+            <h4 style={styles.hoursTitle}>{t('Business Hours', '營業時間')}</h4>
+            <div style={styles.hoursGrid}>
+              <div>{t('Monday', '星期一')}</div><div>8:30 a.m. – 8 p.m.</div>
+              <div>{t('Tuesday', '星期二')}</div><div>8:30 a.m. – 8 p.m.</div>
+              <div>{t('Wednesday', '星期三')}</div><div>8:30 a.m. – 8 p.m.</div>
+              <div style={styles.closedText}>{t('Thursday', '星期四')}</div><div style={styles.closedTextRight}>{t('Closed', '休息')}</div>
+              <div>{t('Friday', '星期五')}</div><div>8:30 a.m. – 8 p.m.</div>
+              <div>{t('Saturday', '星期六')}</div><div>7:30 a.m. – 8 p.m.</div>
+              <div>{t('Sunday', '星期日')}</div><div>8:30 a.m. – 8 p.m.</div>
+            </div>
+          </div>
+
           <p style={styles.footerNotice}>
             {t('* Tax Not Included. Rice & Noodle Same Price.', '* 另稅. 飯粉同價')}
           </p>
@@ -210,6 +221,33 @@ const styles = {
   footerText: {
     fontSize: '1.1rem',
     lineHeight: '1.8'
+  },
+  hoursContainer: {
+    margin: '30px auto',
+    textAlign: 'left',
+    display: 'inline-block',
+    backgroundColor: 'rgba(255,255,255,0.05)',
+    padding: '20px',
+    borderRadius: '8px'
+  },
+  hoursTitle: {
+    margin: '0 0 15px 0',
+    color: '#fbc02d',
+    textAlign: 'center',
+    fontSize: '1.2rem'
+  },
+  hoursGrid: {
+    display: 'grid',
+    gridTemplateColumns: '1fr auto',
+    gap: '8px 30px',
+    fontSize: '1rem'
+  },
+  closedText: {
+    color: '#ff5252'
+  },
+  closedTextRight: {
+    color: '#ff5252',
+    textAlign: 'right'
   },
   footerNotice: {
     color: '#9e9e9e',
